@@ -1,0 +1,73 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+    font-size: 62.5%;
+  }
+}
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+p {
+  text-wrap: pretty;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+/* ==== CSS RESET END ==== */
+
+/* ==== FOOTER STYLES: DO NOT TOUCH!! ==== */
+footer {
+  display: flex;
+  background-color: rgb(17, 17, 17);
+  color: white;
+  justify-content: center;
+  align-items: center;
+}
+.githubIMG {
+  height: 4rem;
+  width: 4rem;
+  margin: 1rem;
+}
+.closer {
+  font-weight: 800;
+  font-size: 2rem;
+}
