@@ -1,83 +1,4 @@
 "use strict";
-/* 
-              ====/ CONSOLE EDITION TIC-TAC-TOE /====
-  1. Create 'initializer()', which will prompt for the names of both players
-  and run the next function.
-
-  2. Create 'gameboard (player_X, player_O)'. This function will contain and
-  create the 'Player' and 'Square' prototypes (gridMaker(), playerMaker()).
-  It will also run 'gameStart()', which will display a welcome message and run
-  the next function.
-
-  3. Create 'playGame()'. Within this main function, there will be many smaller
-  functions that control the flow of the game, such as: stateOfTheBoard(), 
-  switchTurn(), turn(), and winnerCheck(). 
-
-  4. Create 'endGame(winner)'. This function will take in a winner and 
-  congratulates them on their victory. It also freezes all inputs except for
-  the 'newGame' button.
-*/
-
-/* function globalVariables () {
-
-}
-
-function initializer() {
-  const playerOne = prompt("Enter Player One's name!");
-  const playerTwo = prompt("Enter Player Two's name!");
-  gameboard(playerOne, playerTwo);
-}
-
-const gameboard = function (playerOne, playerTwo) {
-  class Player {
-    constructor(name, marker) {
-      this.name = name;
-      this.marker = marker;
-    }
-  }
-
-  class Square {
-    constructor(squareID) {
-      this.filled = false;
-      this.marker = null;
-      this.fillMe = function () {
-        console.log();
-      };
-      this.squareID = squareID;
-      this.sayID = console.log(`SquareID: ${squareID}`);
-    }
-  }
-
-  const player_X = new Player(playerOne, "X");
-  const player_O = new Player(playerTwo, "O");
-  console.log(player_X);
-  console.log(player_O);
-
-  let board = [];
-  function gridMaker() {
-    const rows = 3;
-    const columns = 3;
-    for (let i = 0; i < rows; i++) {
-      const holder = [];
-      const rowNum = i + 1;
-      for (let i = 0; i < columns; i++) {
-        const colNum = i + 1;
-        let tempSquare = new Square(`R${rowNum}C${colNum}`);
-        holder.push(tempSquare);
-      }
-    }
-    console.log(board);
-  }
-  gridMaker();
-};
-
-function fauxGame () {
-  console.log("Game Start! ")
-} */
-
-//initializer();
-// THIS WILL RUN THE GAME (and be annoying if you are trying to code)
-
 /*
  0. storage
  Contains variables and classes to be used in the future.
@@ -98,8 +19,9 @@ function fauxGame () {
 
  3. game
  Handles display as well as logic. Loops over itself until winner is found.
-  3A. display
-  Controls and updates game's visuals. Relies heavily on CSS and the DOM tree.
+  3A. stateOfTheBoard
+  Controls and updates game's visuals. Does so by looping over itself
+  and checks whether or not a Square has been filled.
   3B. logic
   3C. adieu
   Checks if winner has been found or if game has been tied. News delivered to
@@ -125,24 +47,26 @@ function storage() {
     constructor(squareID) {
       this.filled = false;
       this.marker = null;
-      this.fillMe = function () {
-        console.log();
+      this.fillMe = function (marker) {
+        this.filled = true;
+        this.marker = marker;
+        console.log(`${squareID} filled!`);
       };
       this.squareID = squareID;
-      this.sayID = console.log(`SquareID: ${squareID}`);
+      this.sayID = () => console.log(`SquareID: ${squareID}`);
     }
   }
 
   let board = [];
   let players = [];
-  let activePlayer = true;
   let rows = 3;
   let columns = 3;
+  let playGame = true;
 
   function playerer(nameOne, nameTwo, markOne, markTwo) {
     players.push(new Player(nameOne, markOne));
     players.push(new Player(nameTwo, markTwo));
-    return {players}
+    return { players };
   }
 
   function boarder() {
@@ -155,36 +79,158 @@ function storage() {
       }
     }
   }
-  return { playerer, players, boarder, activePlayer };
+  return { playerer, players, boarder, board, playGame };
 }
 const storageVar = storage();
 
 function initializer() {
-  let ans1;
-  let ans2;
-  /* const prompter = (function () {
-    ans1 = prompt("Enter Player One's name:");
-    ans2 = prompt("Enter Player Two's name:");
-  })(); */
-  starter(ans1, ans2);
+  if (storageVar.playGame) {
+    let ans1;
+    let ans2;
+    const prompter = (function () {
+      ans1 = prompt("Enter Player One's name:");
+      ans2 = prompt("Enter Player Two's name:");
+    })();
+    starter(ans1, ans2);
+  }
 }
 
 function starter(strOne, strTwo) {
   storageVar.playerer(strOne, strTwo, "X", "O");
   storageVar.boarder();
-  game();
+  let plr1 = storageVar.players[0];
+  let plr2 = storageVar.players[1];
+  plr1.name = strOne;
+  plr2.name = strTwo;
+  game(plr1, plr2);
 }
 
-function game() {
-  function display () {
-    
-  }
-  function logic () {
+function game(player_X, player_O) {
+  console.log(`Game Start! ${player_X.name} vs. ${player_O.name}!!`);
+  let activePlayer = player_X;
+  let bool = true;
+  let sqFilled = 0;
 
+  function switcher() {
+    if (bool) {
+      activePlayer = player_O;
+      bool = false;
+    } else if (!bool) {
+      activePlayer = player_X;
+      bool = true;
+    }
   }
-  function adieu () {
-    
+
+  function display() {
+    function stateOfTheBoard() {
+      console.log("Current Board:");
+      let co = 0;
+      if (sqFilled === 9)
+      for (let i = 0; i < 3; i++) {
+        let msg = `> ${i}    `;
+        for (let i = 0; i < 3; i++) {
+          if (storageVar.board[co].filled || storageVar.board[co].marker) {
+            msg = msg + `[${storageVar.board[co].marker}]`;
+            sqFilled++;
+          } else {
+            msg = msg + "[ ]";
+          }
+          co++;
+        }
+        console.log(msg);
+      }
+    }
+    stateOfTheBoard();
+    if (storageVar.playGame) logic();
+    return { stateOfTheBoard };
   }
+  function logic() {
+    const ansVar = prompt(
+      `${activePlayer.name}'s turn! Place your piece down!`
+    );
+    let resolved = false;
+    if (ansVar) {
+      for (const sq of storageVar.board) {
+        if (ansVar === sq.squareID && !sq.filled) {
+          sq.marker = activePlayer.marker;
+          sq.filled = true;
+          console.log(`${activePlayer.name} has claimed ${sq.squareID}!`);
+          resolved = true;
+          break;
+        } else if (ansVar === sq.squareID) {
+          console.log("That square is already claimed! Try again!");
+          switcher();
+          resolved = true;
+        }
+      }
+      if (!resolved) {
+        console.log(`Invalid ID! Please log the square you would like to
+          use as the row (R#) and number (C#)!
+          Example: R2C2 (middle square)`);
+        switcher();
+      }
+      const extraLife = adieu();
+      if (!extraLife) {
+        switcher();
+        display();
+      } else if (extraLife) {
+        storageVar.playGame = false;
+        display();
+        endgame(activePlayer.name, false);
+      }
+    }
+  }
+
+  function adieu() {
+    const board = storageVar.board;
+    const scen1 =
+      board[0].filled &&
+      board[0].marker === board[1].marker &&
+      board[1].marker === board[2].marker;
+    const scen2 =
+      board[3].filled &&
+      board[3].marker === board[4].marker &&
+      board[4].marker === board[5].marker;
+    const scen3 =
+      board[6].filled &&
+      board[6].marker === board[7].marker &&
+      board[7].marker === board[8].marker;
+    const scen4 =
+      board[0].filled &&
+      board[0].marker === board[3].marker &&
+      board[3].marker === board[6].marker;
+    const scen5 =
+      board[1].filled &&
+      board[1].marker === board[4].marker &&
+      board[4].marker === board[7].marker;
+    const scen6 =
+      board[2].filled &&
+      board[2].marker === board[5].marker &&
+      board[5].marker === board[8].marker;
+    const scen7 =
+      board[0].filled &&
+      board[0].marker === board[4].marker &&
+      board[4].marker === board[8].marker;
+    const scen8 =
+      board[2].filled &&
+      board[2].marker === board[4].marker &&
+      board[4].marker === board[6].marker;
+    if (scen1 || scen2 || scen3 || scen4 || scen5 || scen6 || scen7 || scen8) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  display();
+}
+
+function endgame(winner, tieStatus) {
+  console.log(`${winner} has won the game! Congrats!`);
+  console.log("Reload to play again!");
+}
+
+function reset() {
+  // DOES NOT WORK CURRENTLY!!
 }
 
 initializer();
