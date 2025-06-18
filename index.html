@@ -8,8 +8,60 @@
     <script src="script.js" defer></script>
   </head>
   <body>
-    <header></header>
-    <main></main>
+    <main>
+      <div class="core">
+        <div class="row">
+          <div class="square">
+            <p class="squareHole"></p>
+          </div>
+          <div class="square">
+            <p class="squareHole"></p>
+          </div>
+          <div class="square">
+            <p class="squareHole"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="square">
+            <p class="squareHole"></p>
+          </div>
+          <div class="square">
+            <p class="squareHole"></p>
+          </div>
+          <div class="square">
+            <p class="squareHole"></p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="square">
+            <p class="squareHole"></p>
+          </div>
+          <div class="square">
+            <p class="squareHole"></p>
+          </div>
+          <div class="square">
+            <p class="squareHole"></p>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div class="starterModal">
+      <img src="img/tictactoeLogo.jpg" alt="Tic-Tac-Toe Logo" class="logo" />
+      <button class="closeBTN" onclick="DOMvar.hideModal()">X</button>
+      <p class="entryText">Enter your names below to play TIC-TAC-TOE!!</p>
+      <form action="" class="modalForm">
+        <div class="inpRow">
+          <label for="plrOne" class="one">Player One (X):</label
+          ><input type="text" id="plrOne" class="oneTXT"/>
+        </div>
+        <div class="inpRow">
+          <label for="plrTwo" class="two">Player Two (O):</label
+          ><input type="text" id="plrTwo" class="twoTXT"/>
+        </div>
+      </form>
+      <button class="playTic" type="submit" onclick="initializer()">Ready!</button>
+    </div>
+    <div class="overlay"></div>
     <footer>
       <p class="closer">== more by NOVABRIX (GitHub) ==</p>
       <a href="https://github.com/novabrix" class="githubLink">
@@ -22,4 +74,3 @@
     </footer>
   </body>
 </html>
-

@@ -54,6 +54,198 @@ h6 {
 }
 /* ==== CSS RESET END ==== */
 
+body {
+  --darkPurple: rgb(7, 0, 14);
+  --lightPurple: rgb(127, 90, 165);
+  --veryLightPurple: rgb(186, 149, 224);
+  --lightGreen: rgb(134, 255, 104);
+  --lightOrange: rgb(253, 194, 83);
+  --lightGrad: linear-gradient(to top right, var(--lightGreen), var(--lightOrange));
+}
+
+main {
+  height: 90vh;
+  background-color: var(--darkPurple);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.core {
+  height: 88vh;
+  width: 50vw;
+  border: 2rem solid var(--lightPurple);
+  border-radius: 3rem;
+  background-color: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.core > * {
+  margin: 1vh 1vw;
+}
+
+.row {
+  height: 25vh;
+  width: 45vw;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.row > * {
+  margin: 1vh;
+}
+
+.square {
+  height: 23vh;
+  width: 15vw;
+  background-color: white;
+  border-radius: 2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.squareHole {
+  background-color: var(--darkPurple);
+  height: 19vh;
+  width: 12vw;
+  border-radius: 2rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 8.5rem;
+  font-weight: 900;
+}
+
+.starterModal {
+  width: 60vw;
+  background-color: black;
+  border-radius: 3rem;
+
+  position: absolute;
+  top: 5vh;
+  right: 20vw;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.starterModal>*{
+  margin: 1vh 1vw;
+}
+
+.logo,
+.signOff {
+  height: 20vh;
+  width: 70vh;
+}
+
+.closeBTN {
+  background-color: black;
+  color: white;
+  font-size: 4rem;
+  font-weight: 900;
+  border: none;
+  position: absolute;
+  top: 1vh;
+  right: 1vw;
+  border: 0.2rem solid black;
+}
+
+.closeBTN:hover {
+  color: var(--veryLightPurple);
+  border: 0.2rem dashed var(--veryLightPurple);
+  cursor: pointer;
+}
+
+.signOff {
+  width: 80vh;
+}
+
+form > * {
+  margin: 2vh 2vw;
+}
+
+.inpRow>* {
+  margin: 1vw;
+}
+
+.entryText,
+label {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+input {
+  font-size: 2rem;
+  font-weight: 600;
+  background-color: black;
+  padding: 0.5vh 0.5vw;
+}
+
+.one {
+  color: var(--lightOrange);
+}
+
+.two {
+  color: var(--lightGreen);
+}
+
+.oneTXT {
+  border: 0.4rem solid var(--lightOrange);
+  border-radius: 0.5rem;
+  color: var(--lightOrange);
+}
+
+.twoTXT {
+  border: 0.4rem solid var(--lightGreen);
+  border-radius: 0.5rem;
+  color: var(--lightGreen);
+}
+
+.playTic {
+  background-color: black;
+  color: white;
+  padding: 0.4rem 2rem;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.1rem;
+  border: 0.4rem solid white;
+}
+
+.playTic:hover {
+  color: var(--veryLightPurple);
+  border: 0.4rem solid var(--veryLightPurple);
+  cursor: pointer;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  z-index: 1;
+  background-color: var(--darkPurple);
+  height: 100%;
+  width: 100%;
+}
+
+.hidden {
+  display: none;
+  opacity: 0;
+}
+
 /* ==== FOOTER STYLES: DO NOT TOUCH!! ==== */
 footer {
   display: flex;

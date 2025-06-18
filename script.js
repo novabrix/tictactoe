@@ -83,14 +83,33 @@ function storage() {
 }
 const storageVar = storage();
 
+function DOMstorage() {
+  const starterModal = document.querySelector(".starterModal");
+  const overlay = document.querySelector(".overlay");
+  const oneRaw = document.querySelector(".oneTXT");
+  const twoRaw = document.querySelector(".twoTXT");
+  const oneTXT = oneRaw.textContent;
+  const twoTXT = twoRaw.textContent;
+
+  function hideModal() {
+    starterModal.classList.add("hidden");
+    overlay.classList.add("hidden");
+  }
+
+  function showModal() {
+    starterModal.classList.remove("hidden");
+    overlay.classList.remove("hidden");
+  }
+
+  return { hideModal, showModal, oneTXT, twoTXT };
+}
+const DOMvar = DOMstorage();
+
 function initializer() {
   if (storageVar.playGame) {
-    let ans1;
-    let ans2;
-    const prompter = (function () {
-      ans1 = prompt("Enter Player One's name:");
-      ans2 = prompt("Enter Player Two's name:");
-    })();
+    const ans1 = DOMvar.oneTXT;
+    const ans2 = DOMvar.twoTXT;
+    DOMvar.hideModal();
     starter(ans1, ans2);
   }
 }
@@ -125,20 +144,20 @@ function game(player_X, player_O) {
     function stateOfTheBoard() {
       console.log("Current Board:");
       let co = 0;
-      if (sqFilled === 9)
-      for (let i = 0; i < 3; i++) {
-        let msg = `> ${i}    `;
+      if (sqFilled < 9)
         for (let i = 0; i < 3; i++) {
-          if (storageVar.board[co].filled || storageVar.board[co].marker) {
-            msg = msg + `[${storageVar.board[co].marker}]`;
-            sqFilled++;
-          } else {
-            msg = msg + "[ ]";
+          let msg = `> ${i}    `;
+          for (let i = 0; i < 3; i++) {
+            if (storageVar.board[co].filled || storageVar.board[co].marker) {
+              msg = msg + `[${storageVar.board[co].marker}]`;
+              sqFilled++;
+            } else {
+              msg = msg + "[ ]";
+            }
+            co++;
           }
-          co++;
+          console.log(msg);
         }
-        console.log(msg);
-      }
     }
     stateOfTheBoard();
     if (storageVar.playGame) logic();
@@ -233,4 +252,4 @@ function reset() {
   // DOES NOT WORK CURRENTLY!!
 }
 
-initializer();
+// initializer();
