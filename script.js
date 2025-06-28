@@ -83,6 +83,16 @@ function DOMstorage() {
   const R3C2 = document.querySelector(".sq8");
   const R3C3 = document.querySelector(".sq9");
 
+  const sqTXT1 = R1C1.children[0];
+  const sqTXT2 = R1C2.children[0];
+  const sqTXT3 = R1C3.children[0];
+  const sqTXT4 = R2C1.children[0];
+  const sqTXT5 = R2C2.children[0];
+  const sqTXT6 = R2C3.children[0];
+  const sqTXT7 = R3C1.children[0];
+  const sqTXT8 = R3C2.children[0];
+  const sqTXT9 = R3C3.children[0];
+
   function hideModal() {
     starterModal.classList.add("hidden");
     overlay.classList.add("hidden");
@@ -109,6 +119,15 @@ function DOMstorage() {
     R3C1,
     R3C2,
     R3C3,
+    sqTXT1,
+    sqTXT2,
+    sqTXT3,
+    sqTXT4,
+    sqTXT5,
+    sqTXT6,
+    sqTXT7,
+    sqTXT8,
+    sqTXT9,
     core,
   };
 }
@@ -120,6 +139,7 @@ const DOMvar = DOMstorage();
 function tictactoe() {
   // TICTACTOE: Super-function that contains all game functions.
 
+  let play = true;
   let switchBool = true;
   const player_X = storageVar.players[0];
   const player_O = storageVar.players[1];
@@ -150,6 +170,18 @@ function tictactoe() {
     `R3C3`,
   ];
 
+  const sqHoles = [
+    DOMvar.sqTXT1,
+    DOMvar.sqTXT2,
+    DOMvar.sqTXT3,
+    DOMvar.sqTXT4,
+    DOMvar.sqTXT5,
+    DOMvar.sqTXT6,
+    DOMvar.sqTXT7,
+    DOMvar.sqTXT8,
+    DOMvar.sqTXT9,
+  ];
+
   function initializer() {
     // INITIALIZER: Runs when "Play Game!" is clicked. Hides the prompt
     // modal and creates players
@@ -169,23 +201,25 @@ function tictactoe() {
     // Calls: display(), adieu(), switcher()
     // Replaces: game()
 
-    for (let i = 0; i < sqValues.length; i++) {
-      if (sqNum === sqValues[i] && sqValues[i]) {
-        const selectedSq = DOMsquareArr[i];
-        const childTXT = selectedSq.children;
-        if (switchBool) {
-          selectedSq.style.backgroundColor = "rgb(253, 194, 83)";
-          childTXT[0].textContent = "X";
-          childTXT[0].style.color = "rgb(245, 172, 37)";
-        } else if (!switchBool) {
-          selectedSq.style.backgroundColor = "rgb(134, 255, 104)";
-          childTXT[0].textContent = "O";
-          childTXT[0].style.color = "rgb(83, 247, 42)";
+    if (play) {
+      for (let i = 0; i < sqValues.length; i++) {
+        if (sqNum === sqValues[i] && sqValues[i]) {
+          const selectedSq = DOMsquareArr[i];
+          const childTXT = selectedSq.children;
+          if (switchBool) {
+            selectedSq.style.backgroundColor = "rgb(253, 194, 83)";
+            childTXT[0].textContent = "X";
+            childTXT[0].style.color = "rgb(245, 172, 37)";
+          } else if (!switchBool) {
+            selectedSq.style.backgroundColor = "rgb(134, 255, 104)";
+            childTXT[0].textContent = "O";
+            childTXT[0].style.color = "rgb(83, 247, 42)";
+          }
         }
       }
+      adieu();
+      if (play) switcher();
     }
-    adieu();
-    switcher();
   }
 
   function switcher() {
@@ -208,8 +242,52 @@ function tictactoe() {
     }
   }
 
-  function adieu () {
+  function adieu() {
+    const scen1 =
+      sqHoles[0].textContent &&
+      sqHoles[0].textContent === sqHoles[1].textContent &&
+      sqHoles[1].textContent === sqHoles[2].textContent;
+    const scen2 =
+      sqHoles[3].textContent &&
+      sqHoles[3].textContent === sqHoles[4].textContent &&
+      sqHoles[4].textContent === sqHoles[5].textContent;
+    const scen3 =
+      sqHoles[6].textContent &&
+      sqHoles[6].textContent === sqHoles[7].textContent &&
+      sqHoles[7].textContent === sqHoles[8].textContent;
+    const scen4 =
+      sqHoles[0].textContent &&
+      sqHoles[0].textContent === sqHoles[3].textContent &&
+      sqHoles[3].textContent === sqHoles[6].textContent;
+    const scen5 =
+      sqHoles[1].textContent &&
+      sqHoles[1].textContent === sqHoles[4].textContent &&
+      sqHoles[4].textContent === sqHoles[7].textContent;
+    const scen6 =
+      sqHoles[2].textContent &&
+      sqHoles[2].textContent === sqHoles[5].textContent &&
+      sqHoles[5].textContent === sqHoles[8].textContent;
+    const scen7 =
+      sqHoles[0].textContent &&
+      sqHoles[0].textContent === sqHoles[4].textContent &&
+      sqHoles[4].textContent === sqHoles[8].textContent;
+    const scen8 =
+      sqHoles[2].textContent &&
+      sqHoles[2].textContent === sqHoles[4].textContent &&
+      sqHoles[4].textContent === sqHoles[6].textContent;
 
+    if (scen1 || scen2 || scen3 || scen4 || scen5 || scen6 || scen7 || scen8) {
+      endgame();
+    }
+  }
+
+  function endgame() {
+    play = false;
+    if (switchBool) {
+      console.log(`The winner is ${storageVar.players[0].name}!`);
+    } else if (!switchBool) {
+      console.log(`The winner is ${storageVar.players[1].name}!`);
+    }
   }
 
   return { initializer, round };
