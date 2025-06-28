@@ -9,40 +9,54 @@
   </head>
   <body>
     <main>
+      <div class="orangeSide">
+        <h2 class="orangeLabel">Player One (X)</h2>
+        <img
+          src="img/orangeMan.png"
+          alt="Cartoony Orange Man"
+          class="orangeIMG"
+        />
+        <h1 class="orangeName">TheOrangutan</h1>
+      </div>
       <div class="core">
         <div class="row">
-          <div class="square">
+          <div class="square sq1" onclick="bouncer.round(`R1C1`)">
             <p class="squareHole"></p>
           </div>
-          <div class="square">
+          <div class="square sq2" onclick="bouncer.round(`R1C2`)">
             <p class="squareHole"></p>
           </div>
-          <div class="square">
-            <p class="squareHole"></p>
-          </div>
-        </div>
-        <div class="row">
-          <div class="square">
-            <p class="squareHole"></p>
-          </div>
-          <div class="square">
-            <p class="squareHole"></p>
-          </div>
-          <div class="square">
+          <div class="square sq3" onclick="bouncer.round(`R1C3`)">
             <p class="squareHole"></p>
           </div>
         </div>
         <div class="row">
-          <div class="square">
+          <div class="square sq4" onclick="bouncer.round(`R2C1`)">
             <p class="squareHole"></p>
           </div>
-          <div class="square">
+          <div class="square sq5" onclick="bouncer.round(`R2C2`)">
             <p class="squareHole"></p>
           </div>
-          <div class="square">
+          <div class="square sq6" onclick="bouncer.round(`R2C3`)">
             <p class="squareHole"></p>
           </div>
         </div>
+        <div class="row">
+          <div class="square sq7" onclick="bouncer.round(`R3C1`)">
+            <p class="squareHole"></p>
+          </div>
+          <div class="square sq8" onclick="bouncer.round(`R3C2`)">
+            <p class="squareHole"></p>
+          </div>
+          <div class="square sq9" onclick="bouncer.round(`R3C3`)">
+            <p class="squareHole"></p>
+          </div>
+        </div>
+      </div>
+      <div class="greenSide mediocre">
+        <h2 class="greenLabel">Player Two (O)</h2>
+        <img src="img/greenMan.png" alt="Cartoony Green Man" class="greenIMG" />
+        <h1 class="greenName">GreenyMcGee</h1>
       </div>
     </main>
     <div class="starterModal">
@@ -52,14 +66,22 @@
       <form action="" class="modalForm">
         <div class="inpRow">
           <label for="plrOne" class="one">Player One (X):</label
-          ><input type="text" id="plrOne" class="oneTXT"/>
+          ><input
+            type="text"
+            id="plrOne"
+            class="oneTXT"
+            minlength="3"
+            maxlength="25"
+          />
         </div>
         <div class="inpRow">
           <label for="plrTwo" class="two">Player Two (O):</label
-          ><input type="text" id="plrTwo" class="twoTXT"/>
+          ><input type="text" id="plrTwo" class="twoTXT" />
         </div>
       </form>
-      <button class="playTic" type="submit" onclick="initializer()">Ready!</button>
+      <button class="playTic" type="submit" onclick="bouncer.initializer()">
+        Ready!
+      </button>
     </div>
     <div class="overlay"></div>
     <footer>

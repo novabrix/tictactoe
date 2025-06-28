@@ -1,38 +1,229 @@
 "use strict";
+
+function storage() {
+  // STORAGE : Contains miscellaneous functions/classes/variables that would
+  // formerly go in the global scope.
+
+  class Player {
+    constructor(name, marker) {
+      this.name = name;
+      this.marker = marker;
+    }
+  }
+  class Square {
+    constructor(squareID) {
+      this.filled = false;
+      this.marker = null;
+      this.fillMe = function (marker) {
+        this.filled = true;
+        this.marker = marker;
+        console.log(`${squareID} filled!`);
+      };
+      this.squareID = squareID;
+      this.sayID = () => console.log(`SquareID: ${squareID}`);
+    }
+  }
+
+  let board = [];
+  let players = [];
+  let rows = 3;
+  let columns = 3;
+  let playGame = true;
+
+  function playerer(nameOne, nameTwo, markOne, markTwo) {
+    players.push(new Player(nameOne, markOne));
+    players.push(new Player(nameTwo, markTwo));
+    return { players };
+  }
+
+  function boarder() {
+    for (let i = 0; i < rows; i++) {
+      let rowNum = i + 1;
+      for (let i = 0; i < columns; i++) {
+        let colNum = i + 1;
+        const tempSquare = new Square(`R${rowNum}C${colNum}`);
+        board.push(tempSquare);
+      }
+    }
+  }
+  boarder();
+
+  return {
+    playerer,
+    players,
+    boarder,
+    board,
+    playGame,
+  };
+}
+
+const storageVar = storage();
+
+//
+
+function DOMstorage() {
+  // DOMstorage: Stores all DOM queries/DOM related functions into one
+  // convenient package.
+
+  const starterModal = document.querySelector(".starterModal");
+  const overlay = document.querySelector(".overlay");
+  const oneTXT = document.querySelector(".oneTXT");
+  const twoTXT = document.querySelector(".twoTXT");
+  const orName = document.querySelector(".orangeName");
+  const grName = document.querySelector(".greenName");
+  const core = document.querySelector(".core");
+
+  const R1C1 = document.querySelector(".sq1");
+  const R1C2 = document.querySelector(".sq2");
+  const R1C3 = document.querySelector(".sq3");
+  const R2C1 = document.querySelector(".sq4");
+  const R2C2 = document.querySelector(".sq5");
+  const R2C3 = document.querySelector(".sq6");
+  const R3C1 = document.querySelector(".sq7");
+  const R3C2 = document.querySelector(".sq8");
+  const R3C3 = document.querySelector(".sq9");
+
+  function hideModal() {
+    starterModal.classList.add("hidden");
+    overlay.classList.add("hidden");
+  }
+
+  function showModal() {
+    starterModal.classList.remove("hidden");
+    overlay.classList.remove("hidden");
+  }
+
+  return {
+    hideModal,
+    showModal,
+    oneTXT,
+    twoTXT,
+    orName,
+    grName,
+    R1C1,
+    R1C2,
+    R1C3,
+    R2C1,
+    R2C2,
+    R2C3,
+    R3C1,
+    R3C2,
+    R3C3,
+    core,
+  };
+}
+const DOMvar = DOMstorage();
+
+///// /=====================/* STORAGE END!! */=====================/
+//
+
+function tictactoe() {
+  // TICTACTOE: Super-function that contains all game functions.
+
+  let switchBool = true;
+  const player_X = storageVar.players[0];
+  const player_O = storageVar.players[1];
+  let activePlayer = player_X;
+  const core = DOMvar.core;
+
+  const DOMsquareArr = [
+    DOMvar.R1C1,
+    DOMvar.R1C2,
+    DOMvar.R1C3,
+    DOMvar.R2C1,
+    DOMvar.R2C2,
+    DOMvar.R2C3,
+    DOMvar.R3C1,
+    DOMvar.R3C2,
+    DOMvar.R3C3,
+  ];
+
+  const sqValues = [
+    `R1C1`,
+    `R1C2`,
+    `R1C3`,
+    `R2C1`,
+    `R2C2`,
+    `R2C3`,
+    `R3C1`,
+    `R3C2`,
+    `R3C3`,
+  ];
+
+  function initializer() {
+    // INITIALIZER: Runs when "Play Game!" is clicked. Hides the prompt
+    // modal and creates players
+    // Replaces: old initializer(), starter()
+
+    const ans1 = DOMvar.oneTXT.value;
+    const ans2 = DOMvar.twoTXT.value;
+    DOMvar.hideModal();
+    storageVar.playerer(ans1, ans2, "X", "O");
+    DOMvar.orName.textContent = ans1;
+    DOMvar.grName.textContent = ans2;
+  }
+
+  function round(sqNum) {
+    // ROUND: Runs when a square is clicked. Updates the display, checks for
+    // a win, and switches the turns between players.
+    // Calls: display(), adieu(), switcher()
+    // Replaces: game()
+
+    for (let i = 0; i < sqValues.length; i++) {
+      if (sqNum === sqValues[i] && sqValues[i]) {
+        const selectedSq = DOMsquareArr[i];
+        const childTXT = selectedSq.children;
+        if (switchBool) {
+          selectedSq.style.backgroundColor = "rgb(253, 194, 83)";
+          childTXT[0].textContent = "X";
+          childTXT[0].style.color = "rgb(245, 172, 37)";
+        } else if (!switchBool) {
+          selectedSq.style.backgroundColor = "rgb(134, 255, 104)";
+          childTXT[0].textContent = "O";
+          childTXT[0].style.color = "rgb(83, 247, 42)";
+        }
+      }
+    }
+    adieu();
+    switcher();
+  }
+
+  function switcher() {
+    // SWITCH: Switches the active player.
+    const orange = document.querySelector(".orangeSide");
+    const green = document.querySelector(".greenSide");
+
+    if (switchBool) {
+      switchBool = false;
+      activePlayer = player_O;
+      green.classList.remove("mediocre");
+      orange.classList.add("mediocre");
+      core.style.border = "2rem solid rgb(134, 255, 104)";
+    } else if (!switchBool) {
+      switchBool = true;
+      activePlayer = player_X;
+      green.classList.add("mediocre");
+      orange.classList.remove("mediocre");
+      core.style.border = "2rem solid rgb(253, 194, 83)";
+    }
+  }
+
+  function adieu () {
+
+  }
+
+  return { initializer, round };
+}
+
+const bouncer = tictactoe();
+
+//
+///// /=====================/* COMMENTS START!! */=====================/
 /*
- 0. storage
- Contains variables and classes to be used in the future.
- - Player, Square classes
- - board array
- - activePlayer boolean
 
- 1. initializer
- Receives player names and runs 'starter()'.
- - prompter()
- - runs starter()
-
- 2. starter
- Creates board and players, and runs 'game()'.
- - playerer()
- - boarder()
- - runs game()
-
- 3. game
- Handles display as well as logic. Loops over itself until winner is found.
-  3A. stateOfTheBoard
-  Controls and updates game's visuals. Does so by looping over itself
-  and checks whether or not a Square has been filled.
-  3B. logic
-  3C. adieu
-  Checks if winner has been found or if game has been tied. News delivered to
-  endgame().
-
- 4. endgame
- Takes in news, declares a window and disables all miscellanous
-
- 5. reset
- Resets all display styles and runs initializer()
-*/
+function ansVar(val) {
+  return (ansVar = val);
+}
 
 // FACTORY FUNCTION
 function storage() {
@@ -79,56 +270,13 @@ function storage() {
       }
     }
   }
-  return { playerer, players, boarder, board, playGame };
-}
-const storageVar = storage();
-
-function DOMstorage() {
-  const starterModal = document.querySelector(".starterModal");
-  const overlay = document.querySelector(".overlay");
-  const oneRaw = document.querySelector(".oneTXT");
-  const twoRaw = document.querySelector(".twoTXT");
-  const oneTXT = oneRaw.textContent;
-  const twoTXT = twoRaw.textContent;
-
-  function hideModal() {
-    starterModal.classList.add("hidden");
-    overlay.classList.add("hidden");
-  }
-
-  function showModal() {
-    starterModal.classList.remove("hidden");
-    overlay.classList.remove("hidden");
-  }
-
-  return { hideModal, showModal, oneTXT, twoTXT };
-}
-const DOMvar = DOMstorage();
-
-function initializer() {
-  if (storageVar.playGame) {
-    const ans1 = DOMvar.oneTXT;
-    const ans2 = DOMvar.twoTXT;
-    DOMvar.hideModal();
-    starter(ans1, ans2);
-  }
-}
-
-function starter(strOne, strTwo) {
-  storageVar.playerer(strOne, strTwo, "X", "O");
   storageVar.boarder();
-  let plr1 = storageVar.players[0];
-  let plr2 = storageVar.players[1];
-  plr1.name = strOne;
-  plr2.name = strTwo;
-  game(plr1, plr2);
-}
+  playerer(strOne, strTwo, "X", "O");
 
-function game(player_X, player_O) {
-  console.log(`Game Start! ${player_X.name} vs. ${player_O.name}!!`);
+  let player_X = players[0];
+  let player_O = players[1];
   let activePlayer = player_X;
   let bool = true;
-  let sqFilled = 0;
 
   function switcher() {
     if (bool) {
@@ -140,43 +288,194 @@ function game(player_X, player_O) {
     }
   }
 
-  function display() {
-    function stateOfTheBoard() {
-      console.log("Current Board:");
-      let co = 0;
-      if (sqFilled < 9)
-        for (let i = 0; i < 3; i++) {
-          let msg = `> ${i}    `;
-          for (let i = 0; i < 3; i++) {
-            if (storageVar.board[co].filled || storageVar.board[co].marker) {
-              msg = msg + `[${storageVar.board[co].marker}]`;
-              sqFilled++;
-            } else {
-              msg = msg + "[ ]";
-            }
-            co++;
-          }
-          console.log(msg);
-        }
-    }
-    stateOfTheBoard();
-    if (storageVar.playGame) logic();
-    return { stateOfTheBoard };
+  return {
+    playerer,
+    players,
+    boarder,
+    board,
+    playGame,
+    player_X,
+    player_O,
+    switcher,
+    bool,
+    activePlayer,
+  };
+}
+const storageVar = storage();
+
+function DOMstorage() {
+  const starterModal = document.querySelector(".starterModal");
+  const overlay = document.querySelector(".overlay");
+  const oneTXT = document.querySelector(".oneTXT");
+  const twoTXT = document.querySelector(".twoTXT");
+  const orName = document.querySelector(".orangeName");
+  const grName = document.querySelector(".greenName");
+
+  const R1C1 = document.querySelector('.sq1');
+  const R1C2 = document.querySelector('.sq1');
+  const R1C3 = document.querySelector('.sq1');
+  const R2C1 = document.querySelector('.sq1');
+  const R2C2 = document.querySelector('.sq1');
+  const R2C3 = document.querySelector('.sq1');
+  const R3C1 = document.querySelector('.sq1');
+  const R3C2 = document.querySelector('.sq1');
+  const R3C3 = document.querySelector('.sq1');
+
+  function hideModal() {
+    starterModal.classList.add("hidden");
+    overlay.classList.add("hidden");
   }
-  function logic() {
-    const ansVar = prompt(
-      `${activePlayer.name}'s turn! Place your piece down!`
-    );
+
+  function showModal() {
+    starterModal.classList.remove("hidden");
+    overlay.classList.remove("hidden");
+  }
+
+  return {
+    hideModal,
+    showModal,
+    oneTXT,
+    twoTXT,
+    orName,
+    grName,
+    R1C1,
+    R1C2,
+    R1C3,
+    R2C1,
+    R2C2,
+    R2C3,
+    R3C1,
+    R3C2,
+    R3C3,
+  };
+}
+const DOMvar = DOMstorage();
+
+function initializer() {
+  if (storageVar.playGame) {
+    const ans1 = DOMvar.oneTXT.value;
+    const ans2 = DOMvar.twoTXT.value;
+    DOMvar.hideModal();
+    starter(ans1, ans2);
+  }
+}
+
+function starter(strOne, strTwo) {
+  //let plr1 = storageVar.players[0];
+  let plr2 = storageVar.players[1];
+  plr1.name = strOne;
+  plr2.name = strTwo; //
+  DOMvar.orName.textContent = strOne;
+  DOMvar.grName.textContent = strTwo;
+  //game(plr1, plr2);
+}
+
+function round(sqString) {
+  let j = 0;
+  for (const sq of storageVar.board) {
+    if (sqString == sq.squareID && !sq.filled) {
+      sq.filled = true;
+      sq.marker = storageVar.activePlayer.marker;
+
+      const domCaller = function () {
+        `DOMvar.${sqString}.color`
+      };
+      domCaller();
+      break;
+    }
+    j++;
+  }
+}
+
+function endgame(winner, tieStatus) {
+  console.log(`${winner} has won the game! Congrats!`);
+  console.log("Reload to play again!");
+}
+
+function reset() {
+  // DOES NOT WORK CURRENTLY!!
+}
+
+//
+
+//
+
+//
+
+/*
+function game(player_X, player_O) {
+  let activePlayer = player_X;
+  let bool = true;
+  let sqFilled = 0;
+  let selectedSq;
+
+  function switcher() {
+    if (bool) {
+      activePlayer = player_O;
+      bool = false;
+    } else if (!bool) {
+      activePlayer = player_X;
+      bool = true;
+    }
+  }
+
+  // Updates the display to reflect the logic state of the board
+  function display() {
+    function checker() {
+      if (selectedSq === `R1C1`) {
+        if (bool) DOMvar.R1C1.backgroundColor = rgb(134, 255, 104);
+        if (!bool) DOMvar.R1C1.backgroundColor = rgb(253, 194, 83);
+        DOMvar.R1C1.textContent = activePlayer.marker;
+      } else if (selectedSq === `R1C2`) {
+        if (bool) DOMvar.R1C2.backgroundColor = rgb(134, 255, 104);
+        if (!bool) DOMvar.R1C2.backgroundColor = rgb(253, 194, 83);
+        DOMvar.R1C2.textContent = activePlayer.marker;
+      } else if (selectedSq === `R1C3`) {
+        if (bool) DOMvar.R1C3.backgroundColor = rgb(134, 255, 104);
+        if (!bool) DOMvar.R1C3.backgroundColor = rgb(253, 194, 83);
+        DOMvar.R1C3.textContent = activePlayer.marker;
+      } else if (selectedSq === `R2C1`) {
+        if (bool) DOMvar.R2C1.backgroundColor = rgb(134, 255, 104);
+        if (!bool) DOMvar.R2C1.backgroundColor = rgb(253, 194, 83);
+        DOMvar.R2C1.textContent = activePlayer.marker;
+      } else if (selectedSq === `R2C2`) {
+        if (bool) DOMvar.R2C2.backgroundColor = rgb(134, 255, 104);
+        if (!bool) DOMvar.R2C2.backgroundColor = rgb(253, 194, 83);
+        DOMvar.R2C2.textContent = activePlayer.marker;
+      } else if (selectedSq === `R2C3`) {
+        if (bool) DOMvar.R2C3.backgroundColor = rgb(134, 255, 104);
+        if (!bool) DOMvar.R2C3.backgroundColor = rgb(253, 194, 83);
+        DOMvar.R2C3.textContent = activePlayer.marker;
+      } else if (selectedSq === `R3C1`) {
+        if (bool) DOMvar.R3C1.backgroundColor = rgb(134, 255, 104);
+        if (!bool) DOMvar.R3C1.backgroundColor = rgb(253, 194, 83);
+        DOMvar.R3C1.textContent = activePlayer.marker;
+      } else if (selectedSq === `R3C2`) {
+        if (bool) DOMvar.R3C2.backgroundColor = rgb(134, 255, 104);
+        if (!bool) DOMvar.R3C2.backgroundColor = rgb(253, 194, 83);
+        DOMvar.R3C2.textContent = activePlayer.marker;
+      } else if (selectedSq === `R3C3`) {
+        if (bool) DOMvar.R3C3.backgroundColor = rgb(134, 255, 104);
+        if (!bool) DOMvar.R3C3.backgroundColor = rgb(253, 194, 83);
+        DOMvar.R3C3.textContent = activePlayer.marker;
+      }
+      checker()
+    }
+    return {};
+  }
+
+  function logic(boardNum) {
     let resolved = false;
-    if (ansVar) {
+    if (typeof boardNum === `string`) {
       for (const sq of storageVar.board) {
-        if (ansVar === sq.squareID && !sq.filled) {
+        if (boardNum === sq.squareID && !sq.filled) {
           sq.marker = activePlayer.marker;
           sq.filled = true;
           console.log(`${activePlayer.name} has claimed ${sq.squareID}!`);
+          selectedSq = boardNum;
           resolved = true;
           break;
-        } else if (ansVar === sq.squareID) {
+        } else if (boardNum === sq.squareID) {
           console.log("That square is already claimed! Try again!");
           switcher();
           resolved = true;
@@ -200,6 +499,7 @@ function game(player_X, player_O) {
     }
   }
 
+  // Checks for all win scenarios
   function adieu() {
     const board = storageVar.board;
     const scen1 =
@@ -240,16 +540,5 @@ function game(player_X, player_O) {
       return false;
     }
   }
-  display();
 }
-
-function endgame(winner, tieStatus) {
-  console.log(`${winner} has won the game! Congrats!`);
-  console.log("Reload to play again!");
-}
-
-function reset() {
-  // DOES NOT WORK CURRENTLY!!
-}
-
-// initializer();
+*/
