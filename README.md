@@ -1,5 +1,5 @@
 # See It Live:
-https://raw.githack.com/novabrix/tictactoe/main/index.html
+https://novabrix.github.io/tictactoe/
 
 ![Banner Image](img/tictactoeSample.png)
 
